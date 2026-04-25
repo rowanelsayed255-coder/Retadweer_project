@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RE Tadweer | Zerowaste</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --nav-bg: #f9fdf5;
+            --green-box: #a3c96a;
+            --dark-green: #679836;
+            --text-dark: #1a1a1a;
+            --circle-btn: #416b22;
+            --logo-blue: #3498db;
+        }
+
+        /* أنيميشن لظهور العناصر */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* أنيميشن دوران رمز التدوير في البداية */
+        @keyframes rotateRecycle {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* أنيميشن نبض الإطارات لكلمات المراحل */
+        @keyframes borderGlow {
+            0% { border-color: rgba(255, 255, 255, 0.3); box-shadow: 0 0 5px rgba(255,255,255,0.1); }
+            100% { border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body.no-scroll {
+            overflow: hidden;
+        }
+
+        body {
+            background-color: var(--nav-bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* --- شاشة البداية الافتتاحية (Splash Screen) --- */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--nav-bg);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .splash-content {
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+            padding: 0 20px;
+        }
+
+        .recycling-symbol {
+            width: 220px; 
+            height: 220px;
+            margin-bottom: 30px;
+            animation: rotateRecycle 12s linear infinite; 
+            cursor: pointer;
+            filter: drop-shadow(0 10px 15px rgba(103, 152, 54, 0.3)); 
+            transition: transform 0.3s ease;
+        }
+
+        .recycling-symbol:hover {
+            transform: scale(1.05);
+        }
+
+        .splash-title {
+            font-size: 50px;
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-bottom: 10px;
+        }
+
+        .splash-tagline {
+            font-size: 22px;
+            color: var(--logo-blue);
+            margin-bottom: 50px;
+            letter-spacing: 3px;
+        }
+
+        .btn-splash {
+            background-color: var(--dark-green);
+            color: #fff;
+            border: none;
+            padding: 18px 60px;
+            border-radius: 40px;
+            font-size: 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .btn-splash:hover {
+            background-color: var(--circle-btn);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+        }
+
+        /* --- Navigation Bar --- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            padding: 15px 5%;
+            background-color: #e5ece2; 
+            position: relative;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            margin-right: auto; 
+        }
+
+        .logo-container img { height: 90px; }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .logo-text .tagline { font-size: 14px; color: var(--logo-blue); font-weight: 500; letter-spacing: 1px; }
+
+        .nav-links { 
+            list-style: none; 
+            display: flex; 
+            gap: 40px; 
+            margin-right: 50px; 
+        }
+        
+        .nav-links li a {
+            text-decoration: none; 
+            color: #1a1a1a; 
+            font-weight: 600; 
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links li a:hover { 
+            color: var(--dark-green); 
+        }
+
+        .auth-buttons { 
+            display: flex; 
+            gap: 15px; 
+            align-items: center; 
+        }
+        
+        .btn-yellow {
+            background-color: #d8b835; 
+            color: #000; 
+            border: none;
+            padding: 8px 30px; 
+            border-radius: 25px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            font-size: 15px; 
+            transition: all 0.3s ease;
+        }
+        
+        .btn-yellow:hover:not([disabled]) {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-login-custom {
+            background-color: transparent;
+            color: #000;
+            border: 2px solid #000;
+            padding: 6px 30px; 
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-login-custom:hover {
+            background-color: rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+
+        .white-strip {
+            background-color: #ffffff;
+            height: 50px;
+            width: 100%;
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            position: relative;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero-img { width: 100%; height: auto; display: block; animation: fadeInUp 1s ease-out; }
+        .hero-text-overlay {
+            position: absolute;
+            color: white;
+            width: 100%;
+            padding: 0 20px;
+        }
+        .hero-text-overlay h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 5.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5); 
+        }
+        .hero-text-overlay p {
+            font-size: 2.7rem;
+            font-weight: 300;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        /* --- العناوين (Titles) --- */
+        .section-title {
+            text-align: center;
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-top: 80px;
+            margin-bottom: 40px; 
+            position: relative;
+            z-index: 10;
+        }
+        .how-it-works-title {
+            margin-top: -100px;
+            margin-bottom: -10px;
+        }
+
+        /* --- Containers --- */
+        .green-container {
+            background-color: var(--green-box); 
+            border-radius: 40px; 
+            width: 90%; 
+            max-width: 1250px;
+            margin: 120px auto; 
+            position: relative; 
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        /* --- Services --- */
+        .services-box { 
+            display: flex; 
+            padding: 60px 0 80px 0; 
+            background-color: #8dae6b !important; /* درجة الأخضر المطفية */
+        }
+        .service-col { 
+            flex: 1; 
+            text-align: center; 
+            padding: 0 30px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        .service-col:not(:last-child) { border-right: 3px solid #1a1a1a; }
+        .service-icon {
+            width: 150px; 
+            height: auto; 
+            margin-top: -120px; 
+            margin-bottom: 20px; 
+            background-color: transparent; 
+            border: none; 
+        }
+        .service-icon img { width: 100%; border-radius: 15px;}
+        .service-col h3 { margin-bottom: 20px; font-size: 26px; font-weight: 700; color: #1a1a1a;}
+        .service-col p { font-size: 15px; line-height: 1.6; margin-bottom: 10px; color: #e9f2e1; font-weight: 400;}
+        
+        /* --- Earth Section --- */
+        .earth-box { 
+            text-align: center; 
+            width: 90%;
+            max-width: 1250px;
+            margin: 120px auto; 
+            position: relative; 
+            padding: 0; 
+            margin-bottom: 220px; 
+            background-color: transparent; 
+            border-radius: 0; 
+            animation: fadeInUp 1.2s ease-out; 
+        }
+        .earth-box img { 
+            width: 100%; 
+            max-width: 1100px; 
+            margin-top: 0; 
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn-get-start {
+            background-color: var(--green-box); 
+            border: none; 
+            padding: 18px 100px; 
+            border-radius: 40px;
+            font-size: 28px; 
+            font-weight: 600; 
+            color: var(--text-dark); 
+            cursor: pointer; 
+            position: absolute;
+            bottom: -45px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+            transition: all 0.3s ease;
+        }
+        .btn-get-start:hover {
+            background-color: var(--dark-green); color: #fff;
+            transform: translateX(-50%) translateY(-5px) scale(1.02); box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+        }
+
+        /* --- Process Section --- */
+        .process-box { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 80px 120px; 
+            margin-top: 50px; 
+            background-color: #8dae6b !important;
+            margin-bottom: 40px;
+        }
+        .process-step { text-align: center; position: relative; z-index: 2; padding: 0 30px; display: flex; flex-direction: column; align-items: center; }
+        .process-step img { width: 220px; margin-bottom: 20px; }
+        .process-step h4 {
+            color: #fff; font-size: 26px; font-weight: 600; display: inline-block; padding: 8px 25px;
+            border: 3px solid rgba(255, 255, 255, 0.4); border-radius: 20px; 
+            animation: borderGlow 2s infinite alternate; 
+            cursor: default;
+            pointer-events: none; 
+            background-color: var(--green-box);
+        }
+        .process-subtext {
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-top: 15px;
+            font-size: 15px;
+        }
+        .dashed-line { position: absolute; top: 48%; left: 15%; right: 15%; border-top: 5px dashed var(--text-dark); z-index: 1; }
+
+        /* --- Reasons Section (Why Recycling Matters) --- */
+        .reasons-title-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .reasons-box {
+            display: flex;
+            padding: 50px 0;
+            margin-top: 0;
+            margin-bottom: 120px;
+            background-color: #8dae6b !important;
+        }
+        .reason-col {
+            flex: 1;
+            text-align: center;
+            padding: 0 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .reason-col:not(:last-child) {
+            border-right: 3px solid #1a1a1a;
+        }
+        .reason-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+        .reason-title img {
+            width: 24px;
+        }
+        .reason-col p {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            line-height: 1.5;
+        }
+
+        /* --- Footer --- */
+        footer { 
+            background-color: #6a9e3a; 
+            color: #fff; 
+            padding: 60px 10% 20px 10%; 
+        }
+        .footer-content { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start;
+            margin-bottom: 40px; 
+        }
+        
+        .footer-left h3 { font-size: 22px; margin-bottom: 5px; font-weight: 600; }
+        .footer-left p { font-size: 16px; font-weight: 400; opacity: 0.9; }
+        
+        .footer-center { text-align: center; }
+        .footer-center h3 { font-size: 34px; margin-bottom: 12px; font-weight: 600; cursor: pointer; }
+        
+        .footer-right { text-align: left; }
+        .footer-block { margin-bottom: 25px; }
+        .footer-right h4 { margin-bottom: 15px; font-size: 20px; font-weight: 600; }
+        
+        .social-links { display: flex; align-items: center; gap: 8px; font-size: 15px; cursor: pointer; }
+        .social-icon { width: 22px; height: 22px; }
+        .separator { margin: 0 5px; opacity: 0.7; }
+        
+        .contact-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 14px; }
+        .contact-icon { width: 20px; height: 20px; }
+        
+        .copyright { text-align: center; font-size: 13px; font-weight: 500; opacity: 0.8; padding-top: 10px; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; padding: 15px 5%; gap: 15px; }
+            .logo-container { margin-right: 0; }
+            .nav-links { margin-right: 0; flex-wrap: wrap; justify-content: center; gap: 20px; }
+            .hero-text-overlay h1 { font-size: 2.2rem; }
+            .hero-text-overlay p { font-size: 1rem; }
+            .section-title { margin-top: 50px; margin-bottom: 30px; font-size: 26px; } 
+            .how-it-works-title { margin-top: -80px; margin-bottom: 10px; }
+            .recycling-symbol { width: 150px; height: 150px; }
+            .splash-title { font-size: 35px; }
+            .splash-tagline { font-size: 16px; }
+            .btn-splash { padding: 12px 30px; font-size: 18px; }
+            .green-container { width: 95%; margin: 80px auto; border-radius: 25px; }
+            .services-box { flex-direction: column; padding: 40px 0; gap: 80px; }
+            .service-col { padding: 0 20px; }
+            .service-col:not(:last-child) { border-right: none; border-bottom: 2px solid rgba(26, 26, 26, 0.2); padding-bottom: 40px; }
+            .service-icon { width: 120px; height: auto; margin-top: -90px; }
+            .earth-box { padding: 40px 20px; margin-bottom: 120px; }
+            .earth-box img { max-width: 100%; }
+            .btn-get-start { padding: 15px 40px; font-size: 20px; width: 80%; bottom: -30px; }
+            .process-box { flex-direction: column; padding: 40px 20px; gap: 50px; margin-top: 20px; }
+            .dashed-line { display: none; }
+            .process-step img { width: 160px; }
+            .reason-col:not(:last-child) { border-right: none; border-bottom: 2px solid rgba(26, 26, 26, 0.2); padding-bottom: 30px; margin-bottom: 30px;}
+            .reasons-box { flex-direction: column; padding: 40px 20px; }
+            .footer-content { flex-direction: column; text-align: center; gap: 40px; align-items: center; }
+            .footer-right { text-align: center; }
+            .social-links { justify-content: center; }
+            .contact-item { justify-content: center; }
+        }
+
+        /* Modal Styles Remain Unchanged */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 100000; 
+            justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content {
+            background-color: #fff; padding: 40px; border-radius: 20px; width: 90%; max-width: 500px;
+            position: relative; transform: translateY(-20px); transition: transform 0.3s ease;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .modal-content::-webkit-scrollbar { width: 6px; }
+        .modal-content::-webkit-scrollbar-thumb { background-color: var(--green-box); border-radius: 10px; }
+        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 28px; color: #999; cursor: pointer; transition: 0.3s; }
+        .close-modal:hover { color: var(--dark-green); }
+        .modal-title { color: var(--text-dark); text-align: center; margin-bottom: 25px; font-size: 28px; font-weight: 700; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-row { display: flex; gap: 15px; }
+        .form-row .form-group { flex: 1; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; color: var(--text-dark); }
+        .form-group input { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; outline: none; transition: border-color 0.3s; }
+        .form-group input:focus { border-color: var(--dark-green); box-shadow: 0 0 5px rgba(103, 152, 54, 0.2); }
+        .forgot-pass { display: block; text-align: right; font-size: 13px; color: var(--logo-blue); text-decoration: none; margin-bottom: 20px; margin-top: -5px; }
+        .forgot-pass:hover { text-decoration: underline; }
+        .btn-submit { width: 100%; margin-top: 15px; padding: 15px; font-size: 18px; }
+
+        .selection-cards { display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; }
+        .card { border: 2px solid #ddd; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; width: 180px; }
+        .card:hover { border-color: var(--dark-green); background-color: #f0f7e6; }
+        .card.active { border-color: var(--dark-green); background-color: #e5ece2; box-shadow: 0 0 10px rgba(103,152,54,0.3); }
+        .card img { width: 150px; height: 150px; object-fit: contain; margin-bottom: 15px; }
+        .card p { font-weight: 600; font-size: 16px; }
+
+        .material-cards { display: flex; flex-direction: row; flex-wrap: nowrap; gap: 15px; justify-content: center; margin-bottom: 25px; }
+        .material-card { border: 2px solid #ddd; border-radius: 10px; padding: 10px; cursor: pointer; transition: 0.3s; width: 100px; height: 100px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        .material-card:hover, .material-card.active { border-color: var(--dark-green); background-color: #5eac7c; }
+        .material-card img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .material-cards .material-card:first-child img { transform: scale(2); }
+
+        .reward-cards { display: flex; gap: 20px; justify-content: center; margin-bottom: 25px; }
+        .reward-card { display: flex; align-items: center; gap: 10px; border: 4px solid #ddd; border-radius: 10px; padding: 10px 25px; cursor: pointer; transition: 0.3s; }
+        .reward-card:hover, .reward-card.active { border-color: #d8b835; background-color: #fdfaf0; }
+        .reward-card img { width: 50px; height: 50px; }
+        .reward-card p { font-weight: 600; }
+
+        .slider-container { margin: 20px 0; text-align: center; }
+        .slider-container input[type=range] { width: 100%; accent-color: var(--dark-green); cursor: pointer; }
+        .value-display { display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin: 20px 0 30px 0; padding: 15px 20px; background: #f9fdf5; border-radius: 10px; border: 1px solid #eee; }
+        .sub-heading { margin-bottom: 10px; font-size: 16px; color: var(--text-dark); font-weight: 600; }
+
+        .btn-social { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; border: 1px solid #ddd; }
+        .btn-google { background-color: #fff; color: #555; }
+        .btn-google:hover { background-color: #f9f9f9; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-google img { width: 24px; height: 24px; }
+        .btn-facebook { background-color: #1877f2; color: #fff; border: none; }
+        .btn-facebook:hover { background-color: #166fe5; }
+        .btn-facebook img { width: 24px; height: 24px; }
+        .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #666; font-weight: 500; font-size: 14px; }
+        .divider::before, .divider::after { content: ""; flex: 1; border-bottom: 1px solid #ccc; }
+        .divider span { padding: 0 10px; }
+    </style>
+</head>
+<body class="no-scroll">
+
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-content">
+            <img src="https://api.iconify.design/fa6-solid/recycle.svg?color=%23679836" class="recycling-symbol" id="splash-logo" alt="Recycling Sign">
+            <h1 class="splash-title">RE Tadweer</h1>
+            <p class="splash-tagline">Zerowaste</p>
+            <button id="enter-btn" class="btn-splash">Change Starts Here</button>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="Rectangle 6.png" alt="Logo">
+            <div class="logo-text">
+                <span class="tagline">Zerowaste</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <button class="btn-yellow" id="open-signup">sign up</button>
+            <button class="btn-login-custom" id="open-login">login</button>
+        </div>
+    </nav>
+    
+    <div class="white-strip"></div>
+
+    <div class="hero-section">
+        <img src="Rectangle 1.png" alt="Forest Header" class="hero-img">
+        <div class="hero-text-overlay">
+            <h1>Turn Your Waste into Value</h1>
+            <p>Start recycling and earn rewards easily</p>
+        </div>
+    </div>
+
+    <h2 class="section-title">Choose what you want to recycle</h2>
+      
+    <div class="green-container services-box">
+        <div class="service-col">
+            <div class="service-icon"><img src="Rectangle 24.png" alt="Paper"></div>
+            <h3>Paper</h3>
+            <p>We turn used paper into new<br>materials, helping save trees and<br>reduce environmental impact.</p>
+            <p>Saving thousands of trees every<br>year</p>
+        </div>
+        <div class="service-col">
+            <div class="service-icon"><img src="Rectangle 25.png" alt="Plastic"></div>
+            <h3>Plastic</h3>
+            <p>We collect and process plastic<br>waste to reduce pollution and<br>give it a second life as useful<br>products</p>
+            <p>Over 1 million plastic bottles recycled</p>
+        </div>
+        <div class="service-col">
+            <div class="service-icon"><img src="Rectangle 26.png" alt="Electronics"></div>
+            <h3>Electronics</h3>
+            <p>We safely recycle electronic devices to<br>recover valuable materials and<br>prevent harmful waste.</p>
+            <p>Hundreds of devices processed<br>monthly</p>
+        </div>
+    </div>
+
+    <div class="earth-box"> <img src="Rectangle 9.png" alt="Earth Illustration">
+        <button class="btn-get-start" id="open-material-modal">Get Started</button>
+    </div>
+
+    <h2 class="section-title how-it-works-title">How It Works</h2>
+
+    <div class="green-container process-box">
+        <div class="dashed-line"></div>
+        <div class="process-step">
+            <img src="Ellipse 1.png" alt="Collect">
+            <h4>collect</h4>
+            <div class="process-subtext">Upload your waste details</div>
+        </div>
+        <div class="process-step">
+            <img src="Ellipse 2.png" alt="Sort">
+            <h4>sort</h4>
+            <div class="process-subtext">We categorize and process it</div>
+        </div>
+        <div class="process-step">
+            <img src="Ellipse 3.png" alt="Deliver">
+            <h4>deliver</h4>
+            <div class="process-subtext">Pickup and reward you</div>
+        </div>
+    </div>
+
+    <div class="reasons-title-container">
+        <h2 class="section-title" style="margin: 0;">Why Recycling Matters</h2>
+        <img src="https://api.iconify.design/fa6-solid/recycle.svg?color=%23679836" width="30" alt="Recycle Icon">
+    </div>
+
+    <div class="green-container reasons-box">
+        <div class="reason-col">
+            <div class="reason-title">
+                <img src="https://api.iconify.design/mdi/leaf-maple.svg?color=%23679836" alt="Leaf">
+                Protect Environment
+            </div>
+            <p>Reduce pollution and<br>keep the planet clean</p>
+        </div>
+        <div class="reason-col">
+            <div class="reason-title">
+                <img src="https://api.iconify.design/mdi/recycle-variant.svg?color=%23679836" alt="Recycle">
+                Save Resources
+            </div>
+            <p>Reuse materials instead of<br>wasting them</p>
+        </div>
+        <div class="reason-col">
+            <div class="reason-title">
+                <img src="https://api.iconify.design/mdi/currency-usd.svg?color=%23679836" alt="Money">
+                Earn Rewards
+            </div>
+            <p>Turn your waste into<br>money or points</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <h3>RE-tadweer</h3>
+                <p>Turn your waste into value</p>
+            </div>
+            <div class="footer-center">
+                <h3>Home</h3>
+                <h3>About</h3>
+            </div>
+            <div class="footer-right">
+                <div class="footer-block">
+                    <h4>Follow us</h4>
+                    <div class="social-links">
+                        <img src="https://api.iconify.design/ic:baseline-facebook.svg?color=white" alt="Facebook" class="social-icon"> <span>Facebook</span> 
+                        <span class="separator">|</span> 
+                        <img src="https://api.iconify.design/mdi:instagram.svg?color=white" alt="Instagram" class="social-icon"> <span>Instagram</span>
+                    </div>
+                </div>
+                <div class="footer-block">
+                    <h4>Contact us</h4>
+                    <div class="contact-item">
+                        <img src="https://api.iconify.design/mdi:email.svg?color=white" alt="Email" class="contact-icon"> info@retadweer.com
+                    </div>
+                    <div class="contact-item">
+                        <img src="https://api.iconify.design/ic:baseline-phone.svg?color=white" alt="Phone" class="contact-icon"> 01000000000
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">&copy; 2026 RE-tadweer. All rights reserved.</div>
+    </footer>
+
+    <div class="modal-overlay" id="login-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-login">&times;</span>
+            <h2 class="modal-title" style="text-align: left; color: #1a1a1a; margin-bottom: 30px;">Sign in</h2>
+            
+            <div class="social-login">
+                <button type="button" class="btn-social btn-google" id="google-login-btn">
+                    <img src="https://api.iconify.design/flat-color-icons:google.svg" alt="Google"> Login with Google
+                </button>
+                <button type="button" class="btn-social btn-facebook" id="facebook-login-btn">
+                    <img src="https://api.iconify.design/ic:baseline-facebook.svg?color=white" alt="Facebook"> Login with Facebook
+                </button>
+            </div>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <form action="#">
+                <div class="form-group" style="text-align: left;">
+                    <label>Email or phone:</label>
+                    <input type="text" required style="background-color: #f9f9f9;">
+                </div>
+                <div class="form-group" style="text-align: left; margin-bottom: 5px;">
+                    <label>Password:</label>
+                    <input type="password" required style="background-color: #f9f9f9;">
+                </div>
+                
+                <div style="text-align: left; margin-bottom: 25px;">
+                    <a href="#" class="forgot-pass" style="text-align: left; display: inline-block;">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn-submit" style="background-color: var(--dark-green); color: white; border: none; border-radius: 10px; cursor: pointer;">Sign in</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="account-type-modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal" id="close-account-type">&times;</span>
+            <h2 class="modal-title" style="font-size: 24px; text-transform: lowercase;">
+                select your account type to<br>Begin your recycling journey
+            </h2>
+            <div class="selection-cards">
+                <div class="card" onclick="selectCard(this, 'account')">
+                    <img src="Rectangle 56.png" alt="Individual User">
+                    <p>Individual User</p>
+                </div>
+                <div class="card" onclick="selectCard(this, 'account')">
+                    <img src="Rectangle 57.png" alt="Company">
+                    <p>Company</p>
+                </div>
+            </div>
+            <button id="next-to-profile" class="btn-yellow btn-submit" style="width: 200px; display: block; margin: 0 auto;">Next</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="create-profile-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-profile">&times;</span>
+            <h2 class="modal-title">Create your profile</h2>
+            <form action="#">
+                <div class="form-group"><label>full name:</label><input type="text" required></div>
+                <div class="form-group"><label>Email:</label><input type="email" required></div>
+                <div class="form-group"><label>Password:</label><input type="password" required></div>
+                <div class="form-group"><label>Confirm Password :</label><input type="password" required></div>
+                <div class="form-group">
+                    <label>Date of birth</label>
+                    <input type="date" required style="color: #666;">
+                </div>
+                <div class="form-group"><label>Phone number:</label><input type="tel" required></div>
+                <div class="form-group"><label>Tel number:</label><input type="tel"></div>
+                <div class="form-group"><label>Adress:</label><input type="text" required></div>
+                
+                <button type="submit" class="btn-yellow btn-submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="choose-material-modal">
+        <div class="modal-content" style="max-width: 650px;">
+            <span class="close-modal" id="close-material">&times;</span>
+            <h2 class="modal-title" style="font-size: 22px; text-transform: uppercase;">CHOOSE YOUR RECYCLING TYPE</h2>
+            <p style="text-align: center; font-size: 13px; font-weight: 500; margin-bottom: 25px;">Select the type of recyclable material, enter the quantity, and see its value</p>
+            
+            <p class="sub-heading">1. Choose Material Type</p>
+            <div class="material-cards">
+                <div class="material-card" onclick="selectCard(this, 'material')"><img src="Gemini_Generated 1.png" alt="Plastic"></div>
+                <div class="material-card" onclick="selectCard(this, 'material')"><img src="ChatGPT 2.png" alt="Paper"></div>
+                <div class="material-card" onclick="selectCard(this, 'material')"><img src="electronics_icon 1.png" alt="Electronics"></div>
+            </div>
+
+            <div class="reward-cards">
+                <div class="reward-card" onclick="selectCard(this, 'reward')">
+                    <img src="ChatGPT  Money.png" alt="Cash"><p>Cash</p>
+                </div>
+                <div class="reward-card" onclick="selectCard(this, 'reward')">
+                    <img src="ChatGPT Star.png" alt="Points"><p>Points</p>
+                </div>
+            </div>
+
+            <p class="sub-heading">2. Enter Quantity</p>
+            <div class="slider-container">
+                <input type="range" id="quantity-slider" min="0" max="100" value="10" oninput="updateValue()">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px; font-weight: 500;">
+                    <span>0kg</span><span>50kg</span><span>100kg</span>
+                </div>
+            </div>
+
+            <p class="sub-heading">3. Your Recycling Value</p>
+            <div class="value-display">
+                <span id="display-kg" style="font-size: 18px;">10kg</span>
+                <div style="text-align: right;">
+                    <div style="color: var(--text-dark); font-size: 15px;">Total Price: <span style="font-weight: 700;">EGP <span id="display-price">25.00</span></span></div>
+                    <div style="font-size: 11px; color: #666; margin-top: 3px;">Rate: EGP 2.50 per kg</div>
+                </div>
+            </div>
+
+            <button class="btn-yellow btn-submit" style="width: 200px; display: block; margin: 0 auto; background-color: var(--green-box); color: rgb(0, 0, 0);" onclick="closeAllModals()">Done</button>
+            <p style="text-align: center; font-size: 10px; color: #086e2f; margin-top: 15px;">Clean and sort your materials for a higher value.<br>Proper sorting helps the environment and increases the value of your recyclables.</p>
+        </div>
+    </div>
+
+    <script>
+        const splashScreen = document.getElementById('splash-screen');
+        const enterBtn = document.getElementById('enter-btn');
+        const splashLogo = document.getElementById('splash-logo');
+
+        function hideSplash() {
+            splashScreen.classList.add('hidden');
+            document.body.classList.remove('no-scroll');
+        }
+
+        enterBtn.addEventListener('click', hideSplash);
+        splashLogo.addEventListener('click', hideSplash);
+
+        const loginModal = document.getElementById('login-modal');
+        const accountTypeModal = document.getElementById('account-type-modal');
+        const createProfileModal = document.getElementById('create-profile-modal');
+        const materialModal = document.getElementById('choose-material-modal');
+
+        const openLoginBtn = document.getElementById('open-login');
+        const openSignupBtn = document.getElementById('open-signup');
+        const openMaterialBtn = document.getElementById('open-material-modal');
+        const nextToProfileBtn = document.getElementById('next-to-profile');
+
+        function closeAllModals() {
+            loginModal.classList.remove('active');
+            accountTypeModal.classList.remove('active');
+            createProfileModal.classList.remove('active');
+            materialModal.classList.remove('active');
+        }
+
+        openLoginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeAllModals();
+            loginModal.classList.add('active');
+        });
+
+        openSignupBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeAllModals();
+            accountTypeModal.classList.add('active');
+        });
+
+        openMaterialBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeAllModals();
+            materialModal.classList.add('active');
+        });
+
+        nextToProfileBtn.addEventListener('click', () => {
+            accountTypeModal.classList.remove('active');
+            createProfileModal.classList.add('active');
+        });
+
+        document.getElementById('close-login').addEventListener('click', () => loginModal.classList.remove('active'));
+        document.getElementById('close-account-type').addEventListener('click', () => accountTypeModal.classList.remove('active'));
+        document.getElementById('close-profile').addEventListener('click', () => createProfileModal.classList.remove('active'));
+        document.getElementById('close-material').addEventListener('click', () => materialModal.classList.remove('active'));
+
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeAllModals();
+            }
+        });
+
+        function selectCard(element, group) {
+            const siblings = element.parentElement.children;
+            for(let i = 0; i < siblings.length; i++) {
+                siblings[i].classList.remove('active');
+            }
+            element.classList.add('active');
+        }
+
+        function updateValue() {
+            const slider = document.getElementById('quantity-slider');
+            const kgDisplay = document.getElementById('display-kg');
+            const priceDisplay = document.getElementById('display-price');
+            
+            const kg = slider.value;
+            const rate = 2.50; 
+            const total = (kg * rate).toFixed(2);
+            
+            kgDisplay.textContent = kg + 'kg';
+            priceDisplay.textContent = total;
+        }
+
+        const googleBtn = document.getElementById('google-login-btn');
+        const facebookBtn = document.getElementById('facebook-login-btn');
+
+        if (googleBtn) {
+            googleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('جاري التحويل لصفحة تسجيل الدخول بحساب Google...');
+            });
+        }
+
+        if (facebookBtn) {
+            facebookBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('جاري التحويل لصفحة تسجيل الدخول بحساب Facebook...');
+            });
+        }
+    </script>
+</body>
+</html>

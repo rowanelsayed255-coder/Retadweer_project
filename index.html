@@ -34,6 +34,41 @@
             100% { border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
         }
 
+        /* --- أنيميشن للصور وعنوان How it works --- */
+        @keyframes floatIcons {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* الأنيميشن الجديد: النط والتوهج */
+        @keyframes throwAndGlow {
+            0%, 100% { 
+                transform: translateY(0) scale(1); 
+                text-shadow: 0 0 0px transparent;
+            }
+            30% { 
+                transform: translateY(-25px) scale(1.1); 
+                text-shadow: 0 0 15px var(--green-box), 0 0 30px var(--dark-green);
+                color: var(--dark-green);
+            }
+            50% { 
+                transform: translateY(0) scale(1); 
+                text-shadow: 0 0 5px var(--green-box);
+                color: var(--text-dark);
+            }
+            70% { 
+                transform: translateY(-12px) scale(1.05); 
+                text-shadow: 0 0 15px var(--green-box);
+                color: var(--dark-green);
+            }
+            85% { 
+                transform: translateY(0) scale(1); 
+                text-shadow: 0 0 0px transparent;
+                color: var(--text-dark);
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -261,6 +296,8 @@
         .how-it-works-title {
             margin-top: -100px;
             margin-bottom: -10px;
+            /* تم تطبيق الأنيميشن الجديد هنا */
+            animation: throwAndGlow 3s ease-in-out infinite; 
         }
 
         /* --- Containers --- */
@@ -278,7 +315,7 @@
         .services-box { 
             display: flex; 
             padding: 60px 0 80px 0; 
-            background-color: #8dae6b !important; /* درجة الأخضر المطفية */
+            background-color: #8dae6b !important; 
         }
         .service-col { 
             flex: 1; 
@@ -297,7 +334,16 @@
             background-color: transparent; 
             border: none; 
         }
-        .service-icon img { width: 100%; border-radius: 15px;}
+        /* الأنيميشن للصور */
+        .service-icon img { 
+            width: 100%; 
+            border-radius: 15px; 
+            animation: floatIcons 3s ease-in-out infinite; 
+        }
+        .service-col:nth-child(1) .service-icon img { animation-delay: 0s; }
+        .service-col:nth-child(2) .service-icon img { animation-delay: 0.5s; }
+        .service-col:nth-child(3) .service-icon img { animation-delay: 1s; }
+
         .service-col h3 { margin-bottom: 20px; font-size: 26px; font-weight: 700; color: #1a1a1a;}
         .service-col p { font-size: 15px; line-height: 1.6; margin-bottom: 10px; color: #e9f2e1; font-weight: 400;}
         
@@ -482,7 +528,7 @@
             .contact-item { justify-content: center; }
         }
 
-        /* Modal Styles Remain Unchanged */
+        /* Modal Styles */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 100000; 
@@ -504,8 +550,8 @@
         .form-row { display: flex; gap: 15px; }
         .form-row .form-group { flex: 1; }
         .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; color: var(--text-dark); }
-        .form-group input { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; outline: none; transition: border-color 0.3s; }
-        .form-group input:focus { border-color: var(--dark-green); box-shadow: 0 0 5px rgba(103, 152, 54, 0.2); }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; outline: none; transition: border-color 0.3s; font-family: 'Poppins', sans-serif; }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--dark-green); box-shadow: 0 0 5px rgba(103, 152, 54, 0.2); }
         .forgot-pass { display: block; text-align: right; font-size: 13px; color: var(--logo-blue); text-decoration: none; margin-bottom: 20px; margin-top: -5px; }
         .forgot-pass:hover { text-decoration: underline; }
         .btn-submit { width: 100%; margin-top: 15px; padding: 15px; font-size: 18px; }
@@ -567,7 +613,7 @@
         <ul class="nav-links">
             <li><a href="#">Home</a></li>
             <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="#" id="open-contact">Contact</a></li>
         </ul>
         <div class="auth-buttons">
             <button class="btn-yellow" id="open-signup">sign up</button>
@@ -695,10 +741,33 @@
         <div class="copyright">&copy; 2026 RE-tadweer. All rights reserved.</div>
     </footer>
 
+    <div class="modal-overlay" id="contact-modal">
+        <div class="modal-content" style="background-color: #d8e5cd;"> <span class="close-modal" id="close-contact">&times;</span>
+            <h2 class="modal-title" style="text-align: left; color: #1a1a1a; margin-bottom: 30px;">Contact Us</h2>
+            
+            <form action="#">
+                <div class="form-group" style="text-align: left;">
+                    <label>full name:</label>
+                    <input type="text" required style="background-color: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6);">
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label>Email:</label>
+                    <input type="email" required style="background-color: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6);">
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label>message:</label>
+                    <textarea required style="background-color: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6); resize: vertical; min-height: 120px;"></textarea>
+                </div>
+                
+                <button type="submit" class="btn-submit" style="background-color: #639845; color: white; border: none; border-radius: 10px; cursor: pointer; width: 40%; margin: 20px auto; display: block; font-weight: 600;">Send</button>
+            </form>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="login-modal">
         <div class="modal-content">
             <span class="close-modal" id="close-login">&times;</span>
-            <h2 class="modal-title" style="text-align: left; color: #1a1a1a; margin-bottom: 30px;">Sign in</h2>
+            <h2 class="modal-title" style="text-align: left; color: #1a1a1a; margin-bottom: 30px;">Login</h2>
             
             <div class="social-login">
                 <button type="button" class="btn-social btn-google" id="google-login-btn">
@@ -727,7 +796,7 @@
                     <a href="#" class="forgot-pass" style="text-align: left; display: inline-block;">Forgot Password?</a>
                 </div>
                 
-                <button type="submit" class="btn-submit" style="background-color: var(--dark-green); color: white; border: none; border-radius: 10px; cursor: pointer;">Sign in</button>
+                <button type="submit" class="btn-submit" style="background-color: var(--dark-green); color: white; border: none; border-radius: 10px; cursor: pointer;">Login</button>
             </form>
         </div>
     </div>
@@ -739,11 +808,11 @@
                 select your account type to<br>Begin your recycling journey
             </h2>
             <div class="selection-cards">
-                <div class="card" onclick="selectCard(this, 'account')">
+                <div class="card active" id="card-individual" onclick="selectCard(this, 'account')">
                     <img src="Rectangle 56.png" alt="Individual User">
                     <p>Individual User</p>
                 </div>
-                <div class="card" onclick="selectCard(this, 'account')">
+                <div class="card" id="card-company" onclick="selectCard(this, 'account')">
                     <img src="Rectangle 57.png" alt="Company">
                     <p>Company</p>
                 </div>
@@ -770,6 +839,36 @@
                 <div class="form-group"><label>Adress:</label><input type="text" required></div>
                 
                 <button type="submit" class="btn-yellow btn-submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="create-company-modal">
+        <div class="modal-content" style="max-width: 550px; background-color: #e5ece2;">
+            <span class="close-modal" id="close-company">&times;</span>
+            <h2 class="modal-title" style="font-size: 24px; color: #1a1a1a;">Create Company Account</h2>
+            <form action="#">
+                <div class="form-group"><label>Company Name:</label><input type="text" required></div>
+                <div class="form-group"><label>Business Email:</label><input type="email" required></div>
+                <div class="form-group"><label>Password:</label><input type="password" required></div>
+                <div class="form-group"><label>Confirm Password:</label><input type="password" required></div>
+                <div class="form-group"><label>Company Type:</label><input type="text" required></div>
+                <div class="form-group"><label>Phone number:</label><input type="tel" required></div>
+                <div class="form-group"><label>Registration Number:</label><input type="text" required></div>
+                
+                <div class="form-row">
+                    <div class="form-group"><label>Tax ID:</label><input type="text" required></div>
+                    <div class="form-group"><label>Number of Employees:</label><input type="number" required></div>
+                </div>
+                
+                <div class="form-group"><label>Established Year:</label><input type="number" required></div>
+                
+                <div class="form-row">
+                    <div class="form-group"><label>Address:</label><input type="text" required></div>
+                    <div class="form-group"><label>City:</label><input type="text" required></div>
+                </div>
+                
+                <button type="submit" class="btn-submit" style="background-color: #8dae6b; color: white; border: none; border-radius: 10px; cursor: pointer; width: 150px; margin: 20px auto; display: block;">Submit</button>
             </form>
         </div>
     </div>
@@ -813,6 +912,16 @@
                 </div>
             </div>
 
+            <p class="sub-heading">4. Upload Material Image</p>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <input type="file" id="material-image" accept="image/*" style="display: none;">
+                <label for="material-image" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 20px; border: 2px dashed var(--dark-green); border-radius: 10px; background-color: #f9fdf5; cursor: pointer; transition: 0.3s;" id="upload-label">
+                    <img src="https://api.iconify.design/mdi:camera-plus.svg?color=%23679836" alt="Camera" style="width: 32px; margin-bottom: 10px;">
+                    <span style="font-size: 14px; font-weight: 600; color: var(--dark-green);">Take a Photo or Choose from Gallery</span>
+                </label>
+                <p id="file-name-display" style="font-size: 12px; color: #666; margin-top: 8px; font-weight: 500; display: none;"></p>
+            </div>
+
             <button class="btn-yellow btn-submit" style="width: 200px; display: block; margin: 0 auto; background-color: var(--green-box); color: rgb(0, 0, 0);" onclick="closeAllModals()">Done</button>
             <p style="text-align: center; font-size: 10px; color: #086e2f; margin-top: 15px;">Clean and sort your materials for a higher value.<br>Proper sorting helps the environment and increases the value of your recyclables.</p>
         </div>
@@ -834,18 +943,23 @@
         const loginModal = document.getElementById('login-modal');
         const accountTypeModal = document.getElementById('account-type-modal');
         const createProfileModal = document.getElementById('create-profile-modal');
+        const createCompanyModal = document.getElementById('create-company-modal'); 
         const materialModal = document.getElementById('choose-material-modal');
+        const contactModal = document.getElementById('contact-modal');
 
         const openLoginBtn = document.getElementById('open-login');
         const openSignupBtn = document.getElementById('open-signup');
         const openMaterialBtn = document.getElementById('open-material-modal');
+        const openContactBtn = document.getElementById('open-contact');
         const nextToProfileBtn = document.getElementById('next-to-profile');
 
         function closeAllModals() {
             loginModal.classList.remove('active');
             accountTypeModal.classList.remove('active');
             createProfileModal.classList.remove('active');
+            createCompanyModal.classList.remove('active'); 
             materialModal.classList.remove('active');
+            contactModal.classList.remove('active');
         }
 
         openLoginBtn.addEventListener('click', (e) => {
@@ -866,15 +980,31 @@
             materialModal.classList.add('active');
         });
 
+        if (openContactBtn) {
+            openContactBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                closeAllModals();
+                contactModal.classList.add('active');
+            });
+        }
+
         nextToProfileBtn.addEventListener('click', () => {
             accountTypeModal.classList.remove('active');
-            createProfileModal.classList.add('active');
+            
+            const companyCard = document.getElementById('card-company');
+            if (companyCard && companyCard.classList.contains('active')) {
+                createCompanyModal.classList.add('active'); 
+            } else {
+                createProfileModal.classList.add('active'); 
+            }
         });
 
         document.getElementById('close-login').addEventListener('click', () => loginModal.classList.remove('active'));
         document.getElementById('close-account-type').addEventListener('click', () => accountTypeModal.classList.remove('active'));
         document.getElementById('close-profile').addEventListener('click', () => createProfileModal.classList.remove('active'));
+        document.getElementById('close-company').addEventListener('click', () => createCompanyModal.classList.remove('active')); 
         document.getElementById('close-material').addEventListener('click', () => materialModal.classList.remove('active'));
+        document.getElementById('close-contact').addEventListener('click', () => contactModal.classList.remove('active'));
 
         window.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal-overlay')) {
@@ -909,14 +1039,34 @@
         if (googleBtn) {
             googleBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                alert('جاري التحويل لصفحة تسجيل الدخول بحساب Google...');
+                window.location.href = "https://accounts.google.com/signin";
             });
         }
 
         if (facebookBtn) {
             facebookBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                alert('جاري التحويل لصفحة تسجيل الدخول بحساب Facebook...');
+                window.location.href = "https://www.facebook.com/login.php";
+            });
+        }
+
+        const imageInput = document.getElementById('material-image');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const uploadLabel = document.getElementById('upload-label');
+
+        if (imageInput) {
+            imageInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const fileName = e.target.files[0].name;
+                    fileNameDisplay.textContent = "Selected: " + fileName;
+                    fileNameDisplay.style.display = "block";
+                    uploadLabel.style.backgroundColor = "#e5ece2";
+                    uploadLabel.style.borderColor = "#416b22";
+                } else {
+                    fileNameDisplay.style.display = "none";
+                    uploadLabel.style.backgroundColor = "#f9fdf5";
+                    uploadLabel.style.borderColor = "var(--dark-green)";
+                }
             });
         }
     </script>

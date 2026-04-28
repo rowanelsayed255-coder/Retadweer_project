@@ -28,10 +28,16 @@
             to { transform: rotate(360deg); }
         }
 
-        /* أنيميشن نبض الإطارات لكلمات المراحل */
-        @keyframes borderGlow {
-            0% { border-color: rgba(255, 255, 255, 0.3); box-shadow: 0 0 5px rgba(255,255,255,0.1); }
-            100% { border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
+        /* أنيميشن حركة وتوهج الكلمات نفسها (التعديل الجديد) */
+        @keyframes textGlowMove {
+            0% { 
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.4); 
+                transform: translateY(0); 
+            }
+            100% { 
+                text-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 25px rgba(255, 255, 255, 0.8); 
+                transform: translateY(-8px); 
+            }
         }
 
         /* --- أنيميشن للصور وعنوان How it works --- */
@@ -282,6 +288,77 @@
             text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
+        /* --- Slider Section --- */
+        .custom-slider-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 60px auto 20px auto; 
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .slider-container {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .slider-img {
+            min-width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 60px;
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(103, 152, 54, 0.75); 
+            color: white;
+            border: none;
+            padding: 20px 12px;
+            cursor: pointer;
+            font-size: 24px;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+            z-index: 10;
+        }
+
+        .slider-arrow:hover {
+            background-color: var(--dark-green);
+        }
+
+        .prev-arrow { left: 15px; }
+        .next-arrow { right: 15px; }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .slider-dot.active-dot, .slider-dot:hover {
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
         /* --- العناوين (Titles) --- */
         .section-title {
             text-align: center;
@@ -296,7 +373,6 @@
         .how-it-works-title {
             margin-top: -100px;
             margin-bottom: -10px;
-            /* تم تطبيق الأنيميشن الجديد هنا */
             animation: throwAndGlow 3s ease-in-out infinite; 
         }
 
@@ -334,7 +410,6 @@
             background-color: transparent; 
             border: none; 
         }
-        /* الأنيميشن للصور */
         .service-icon img { 
             width: 100%; 
             border-radius: 15px; 
@@ -402,14 +477,15 @@
         }
         .process-step { text-align: center; position: relative; z-index: 2; padding: 0 30px; display: flex; flex-direction: column; align-items: center; }
         .process-step img { width: 220px; margin-bottom: 20px; }
+        
+        /* التعديل هنا: إزالة المربع الأبيض وإضافة أنيميشن الكلمة */
         .process-step h4 {
-            color: #fff; font-size: 26px; font-weight: 600; display: inline-block; padding: 8px 25px;
-            border: 3px solid rgba(255, 255, 255, 0.4); border-radius: 20px; 
-            animation: borderGlow 2s infinite alternate; 
+            color: #fff; font-size: 26px; font-weight: 600; display: inline-block;
+            animation: textGlowMove 1.5s infinite alternate ease-in-out; 
             cursor: default;
             pointer-events: none; 
-            background-color: var(--green-box);
         }
+        
         .process-subtext {
             font-weight: 700;
             color: #1a1a1a;
@@ -498,6 +574,8 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .custom-slider-wrapper { margin: 40px auto; width: 95%; }
+            .slider-arrow { padding: 15px 10px; font-size: 18px; }
             .navbar { flex-direction: column; padding: 15px 5%; gap: 15px; }
             .logo-container { margin-right: 0; }
             .nav-links { margin-right: 0; flex-wrap: wrap; justify-content: center; gap: 20px; }
@@ -631,6 +709,20 @@
         </div>
     </div>
 
+    <div class="custom-slider-wrapper">
+        <div class="slider-container" id="image-slider">
+            <img src="Rectangle 80.png" alt="Recycling Event 1" class="slider-img">
+            <img src="Rectangle 88.png" alt="Recycling Event 2" class="slider-img">
+        </div>
+        
+        <button class="slider-arrow prev-arrow" onclick="changeSlide(-1)">&#10094;</button>
+        <button class="slider-arrow next-arrow" onclick="changeSlide(1)">&#10095;</button>
+        
+        <div class="slider-dots">
+            <span class="slider-dot active-dot" onclick="setSlide(0)"></span>
+            <span class="slider-dot" onclick="setSlide(1)"></span>
+        </div>
+    </div>
     <h2 class="section-title">Choose what you want to recycle</h2>
       
     <div class="green-container services-box">
@@ -928,147 +1020,218 @@
     </div>
 
     <script>
-        const splashScreen = document.getElementById('splash-screen');
-        const enterBtn = document.getElementById('enter-btn');
-        const splashLogo = document.getElementById('splash-logo');
+        document.addEventListener("DOMContentLoaded", function() {
+            const splashScreen = document.getElementById('splash-screen');
+            const enterBtn = document.getElementById('enter-btn');
+            const splashLogo = document.getElementById('splash-logo');
 
-        function hideSplash() {
-            splashScreen.classList.add('hidden');
-            document.body.classList.remove('no-scroll');
-        }
-
-        enterBtn.addEventListener('click', hideSplash);
-        splashLogo.addEventListener('click', hideSplash);
-
-        const loginModal = document.getElementById('login-modal');
-        const accountTypeModal = document.getElementById('account-type-modal');
-        const createProfileModal = document.getElementById('create-profile-modal');
-        const createCompanyModal = document.getElementById('create-company-modal'); 
-        const materialModal = document.getElementById('choose-material-modal');
-        const contactModal = document.getElementById('contact-modal');
-
-        const openLoginBtn = document.getElementById('open-login');
-        const openSignupBtn = document.getElementById('open-signup');
-        const openMaterialBtn = document.getElementById('open-material-modal');
-        const openContactBtn = document.getElementById('open-contact');
-        const nextToProfileBtn = document.getElementById('next-to-profile');
-
-        function closeAllModals() {
-            loginModal.classList.remove('active');
-            accountTypeModal.classList.remove('active');
-            createProfileModal.classList.remove('active');
-            createCompanyModal.classList.remove('active'); 
-            materialModal.classList.remove('active');
-            contactModal.classList.remove('active');
-        }
-
-        openLoginBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            closeAllModals();
-            loginModal.classList.add('active');
-        });
-
-        openSignupBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            closeAllModals();
-            accountTypeModal.classList.add('active');
-        });
-
-        openMaterialBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            closeAllModals();
-            materialModal.classList.add('active');
-        });
-
-        if (openContactBtn) {
-            openContactBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeAllModals();
-                contactModal.classList.add('active');
-            });
-        }
-
-        nextToProfileBtn.addEventListener('click', () => {
-            accountTypeModal.classList.remove('active');
-            
-            const companyCard = document.getElementById('card-company');
-            if (companyCard && companyCard.classList.contains('active')) {
-                createCompanyModal.classList.add('active'); 
-            } else {
-                createProfileModal.classList.add('active'); 
+            function hideSplash() {
+                if(splashScreen) {
+                    splashScreen.classList.add('hidden');
+                    document.body.classList.remove('no-scroll');
+                }
             }
-        });
 
-        document.getElementById('close-login').addEventListener('click', () => loginModal.classList.remove('active'));
-        document.getElementById('close-account-type').addEventListener('click', () => accountTypeModal.classList.remove('active'));
-        document.getElementById('close-profile').addEventListener('click', () => createProfileModal.classList.remove('active'));
-        document.getElementById('close-company').addEventListener('click', () => createCompanyModal.classList.remove('active')); 
-        document.getElementById('close-material').addEventListener('click', () => materialModal.classList.remove('active'));
-        document.getElementById('close-contact').addEventListener('click', () => contactModal.classList.remove('active'));
+            if(enterBtn) enterBtn.addEventListener('click', hideSplash);
+            if(splashLogo) splashLogo.addEventListener('click', hideSplash);
 
-        window.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal-overlay')) {
-                closeAllModals();
+            const loginModal = document.getElementById('login-modal');
+            const accountTypeModal = document.getElementById('account-type-modal');
+            const createProfileModal = document.getElementById('create-profile-modal');
+            const createCompanyModal = document.getElementById('create-company-modal'); 
+            const materialModal = document.getElementById('choose-material-modal');
+            const contactModal = document.getElementById('contact-modal');
+
+            const openLoginBtn = document.getElementById('open-login');
+            const openSignupBtn = document.getElementById('open-signup');
+            const openMaterialBtn = document.getElementById('open-material-modal');
+            const openContactBtn = document.getElementById('open-contact');
+            const nextToProfileBtn = document.getElementById('next-to-profile');
+
+            // وجعلنا الدالة Global عشان نقدر نستخدمها في الـ onclick من أي مكان
+            window.closeAllModals = function() {
+                if(loginModal) loginModal.classList.remove('active');
+                if(accountTypeModal) accountTypeModal.classList.remove('active');
+                if(createProfileModal) createProfileModal.classList.remove('active');
+                if(createCompanyModal) createCompanyModal.classList.remove('active'); 
+                if(materialModal) materialModal.classList.remove('active');
+                if(contactModal) contactModal.classList.remove('active');
+            };
+
+            if(openLoginBtn) {
+                openLoginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.closeAllModals();
+                    loginModal.classList.add('active');
+                });
             }
-        });
 
-        function selectCard(element, group) {
-            const siblings = element.parentElement.children;
-            for(let i = 0; i < siblings.length; i++) {
-                siblings[i].classList.remove('active');
+            if(openSignupBtn) {
+                openSignupBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.closeAllModals();
+                    accountTypeModal.classList.add('active');
+                });
             }
-            element.classList.add('active');
-        }
 
-        function updateValue() {
-            const slider = document.getElementById('quantity-slider');
-            const kgDisplay = document.getElementById('display-kg');
-            const priceDisplay = document.getElementById('display-price');
+            if(openMaterialBtn) {
+                openMaterialBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.closeAllModals();
+                    materialModal.classList.add('active');
+                });
+            }
+
+            if (openContactBtn) {
+                openContactBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.closeAllModals();
+                    contactModal.classList.add('active');
+                });
+            }
+
+            if(nextToProfileBtn) {
+                nextToProfileBtn.addEventListener('click', () => {
+                    accountTypeModal.classList.remove('active');
+                    const companyCard = document.getElementById('card-company');
+                    if (companyCard && companyCard.classList.contains('active')) {
+                        createCompanyModal.classList.add('active'); 
+                    } else {
+                        createProfileModal.classList.add('active'); 
+                    }
+                });
+            }
+
+            const closeLogin = document.getElementById('close-login');
+            if(closeLogin) closeLogin.addEventListener('click', () => loginModal.classList.remove('active'));
             
-            const kg = slider.value;
-            const rate = 2.50; 
-            const total = (kg * rate).toFixed(2);
+            const closeAccountType = document.getElementById('close-account-type');
+            if(closeAccountType) closeAccountType.addEventListener('click', () => accountTypeModal.classList.remove('active'));
             
-            kgDisplay.textContent = kg + 'kg';
-            priceDisplay.textContent = total;
-        }
+            const closeProfile = document.getElementById('close-profile');
+            if(closeProfile) closeProfile.addEventListener('click', () => createProfileModal.classList.remove('active'));
+            
+            const closeCompany = document.getElementById('close-company');
+            if(closeCompany) closeCompany.addEventListener('click', () => createCompanyModal.classList.remove('active')); 
+            
+            const closeMaterial = document.getElementById('close-material');
+            if(closeMaterial) closeMaterial.addEventListener('click', () => materialModal.classList.remove('active'));
+            
+            const closeContact = document.getElementById('close-contact');
+            if(closeContact) closeContact.addEventListener('click', () => contactModal.classList.remove('active'));
 
-        const googleBtn = document.getElementById('google-login-btn');
-        const facebookBtn = document.getElementById('facebook-login-btn');
-
-        if (googleBtn) {
-            googleBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.location.href = "https://accounts.google.com/signin";
-            });
-        }
-
-        if (facebookBtn) {
-            facebookBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.location.href = "https://www.facebook.com/login.php";
-            });
-        }
-
-        const imageInput = document.getElementById('material-image');
-        const fileNameDisplay = document.getElementById('file-name-display');
-        const uploadLabel = document.getElementById('upload-label');
-
-        if (imageInput) {
-            imageInput.addEventListener('change', function(e) {
-                if (e.target.files.length > 0) {
-                    const fileName = e.target.files[0].name;
-                    fileNameDisplay.textContent = "Selected: " + fileName;
-                    fileNameDisplay.style.display = "block";
-                    uploadLabel.style.backgroundColor = "#e5ece2";
-                    uploadLabel.style.borderColor = "#416b22";
-                } else {
-                    fileNameDisplay.style.display = "none";
-                    uploadLabel.style.backgroundColor = "#f9fdf5";
-                    uploadLabel.style.borderColor = "var(--dark-green)";
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal-overlay')) {
+                    window.closeAllModals();
                 }
             });
-        }
+
+            window.selectCard = function(element, group) {
+                const siblings = element.parentElement.children;
+                for(let i = 0; i < siblings.length; i++) {
+                    siblings[i].classList.remove('active');
+                }
+                element.classList.add('active');
+            };
+
+            window.updateValue = function() {
+                const slider = document.getElementById('quantity-slider');
+                const kgDisplay = document.getElementById('display-kg');
+                const priceDisplay = document.getElementById('display-price');
+                
+                if(slider && kgDisplay && priceDisplay) {
+                    const kg = slider.value;
+                    const rate = 2.50; 
+                    const total = (kg * rate).toFixed(2);
+                    
+                    kgDisplay.textContent = kg + 'kg';
+                    priceDisplay.textContent = total;
+                }
+            };
+
+            const googleBtn = document.getElementById('google-login-btn');
+            const facebookBtn = document.getElementById('facebook-login-btn');
+
+            if (googleBtn) {
+                googleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = "https://accounts.google.com/signin";
+                });
+            }
+
+            if (facebookBtn) {
+                facebookBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = "https://www.facebook.com/login.php";
+                });
+            }
+
+            const imageInput = document.getElementById('material-image');
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const uploadLabel = document.getElementById('upload-label');
+
+            if (imageInput) {
+                imageInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        const fileName = e.target.files[0].name;
+                        if(fileNameDisplay) {
+                            fileNameDisplay.textContent = "Selected: " + fileName;
+                            fileNameDisplay.style.display = "block";
+                        }
+                        if(uploadLabel) {
+                            uploadLabel.style.backgroundColor = "#e5ece2";
+                            uploadLabel.style.borderColor = "#416b22";
+                        }
+                    } else {
+                        if(fileNameDisplay) fileNameDisplay.style.display = "none";
+                        if(uploadLabel) {
+                            uploadLabel.style.backgroundColor = "#f9fdf5";
+                            uploadLabel.style.borderColor = "var(--dark-green)";
+                        }
+                    }
+                });
+            }
+
+            // --- Slider Logic ---
+            let currentSlideIndex = 0;
+            
+            function updateSlider() {
+                const slider = document.getElementById('image-slider');
+                const dots = document.querySelectorAll('.slider-dot');
+                
+                if(slider) {
+                    slider.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+                    dots.forEach(dot => dot.classList.remove('active-dot'));
+                    if(dots[currentSlideIndex]) dots[currentSlideIndex].classList.add('active-dot');
+                }
+            }
+
+            window.changeSlide = function(direction) {
+                const totalSlides = document.querySelectorAll('.slider-img').length;
+                if(totalSlides === 0) return;
+                
+                currentSlideIndex += direction;
+                
+                if (currentSlideIndex >= totalSlides) {
+                    currentSlideIndex = 0;
+                } else if (currentSlideIndex < 0) {
+                    currentSlideIndex = totalSlides - 1;
+                }
+                
+                updateSlider();
+            };
+
+            window.setSlide = function(index) {
+                currentSlideIndex = index;
+                updateSlider();
+            };
+            
+            setInterval(() => {
+                if(document.querySelectorAll('.slider-img').length > 0) {
+                    window.changeSlide(1);
+                }
+            }, 5000);
+        });
     </script>
 </body>
 </html>

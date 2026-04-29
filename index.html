@@ -16,16 +16,21 @@
             --logo-blue: #3498db;
         }
 
-        /* أنيميشن لظهور العناصر */
+        /* أنيميشن لظهور العناصر في البداية */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* أنيميشن دوران رمز التدوير في البداية */
-        @keyframes rotateRecycle {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* --- Scroll Reveal Animation --- */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* أنيميشن حركة وتوهج الكلمات نفسها */
@@ -98,7 +103,7 @@
             margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            animation: bounceDown 2s infinite ease-in-out; /* عشان تتحرك مع السهم */
+            animation: bounceDown 2s infinite ease-in-out; 
         }
 
         .scroll-arrow-circle {
@@ -172,7 +177,7 @@
             overflow-x: hidden;
         }
 
-        /* --- شاشة البداية الافتتاحية (Splash Screen) --- */
+        /* --- شاشة البداية الافتتاحية (Splash Screen) بتحديث صورة العالم --- */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -193,57 +198,73 @@
             visibility: hidden;
         }
 
+        /* إعدادات صورة العالم لملء الشاشة */
+        .splash-bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* Overlay لإضافة Shadow خفيف وتغميق الصورة عشان الكلام يبان */
+        .splash-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4); 
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.8); 
+            z-index: 2;
+        }
+
         .splash-content {
             text-align: center;
             animation: fadeInUp 1s ease-out;
             padding: 0 20px;
-        }
-
-        .recycling-symbol {
-            width: 220px; 
-            height: 220px;
-            margin-bottom: 30px;
-            animation: rotateRecycle 12s linear infinite; 
-            cursor: pointer;
-            filter: drop-shadow(0 10px 15px rgba(103, 152, 54, 0.3)); 
-            transition: transform 0.3s ease;
-        }
-
-        .recycling-symbol:hover {
-            transform: scale(1.05);
+            position: relative;
+            z-index: 3;
         }
 
         .splash-title {
-            font-size: 50px;
+            font-family: 'Playfair Display', serif;
+            font-size: 65px;
             font-weight: 700;
-            color: var(--dark-green);
+            color: #ffffff;
             margin-bottom: 10px;
+            text-shadow: 2px 2px 15px rgba(0,0,0,0.7);
         }
 
         .splash-tagline {
-            font-size: 22px;
-            color: var(--logo-blue);
+            font-size: 24px;
+            color: var(--green-box);
             margin-bottom: 50px;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 8px rgba(0,0,0,0.8);
         }
 
         .btn-splash {
             background-color: var(--dark-green);
             color: #fff;
-            border: none;
+            border: 2px solid transparent;
             padding: 18px 60px;
             border-radius: 40px;
             font-size: 24px;
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
 
         .btn-splash:hover {
-            background-color: var(--circle-btn);
+            background-color: rgba(103, 152, 54, 0.3);
+            border-color: var(--green-box);
             transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
         }
 
         /* --- Navigation Bar --- */
@@ -390,7 +411,6 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            animation: fadeInUp 1.2s ease-out;
             background-color: transparent; 
             padding: 0;
         }
@@ -411,7 +431,6 @@
             border-radius: 0;
             transform: scale(1.05);
         }
-        /* إلغاء التباعد الذي يسببه التعارض مع سلايدر المودال */
         #image-slider {
             margin: 0 !important;
         }
@@ -486,7 +505,6 @@
             max-width: 1250px;
             margin: 120px auto; 
             position: relative; 
-            animation: fadeInUp 1.2s ease-out;
         }
 
         /* --- Services --- */
@@ -535,7 +553,6 @@
             margin-bottom: 220px; 
             background-color: transparent; 
             border-radius: 0; 
-            animation: fadeInUp 1.2s ease-out; 
         }
         .earth-box img { 
             width: 100%; 
@@ -580,7 +597,6 @@
         .process-step { text-align: center; position: relative; z-index: 2; padding: 0 30px; display: flex; flex-direction: column; align-items: center; }
         .process-step img { width: 220px; margin-bottom: 20px; }
         
-        /* التعديل هنا: إزالة المربع الأبيض وإضافة أنيميشن الكلمة */
         .process-step h4 {
             color: #fff; font-size: 26px; font-weight: 600; display: inline-block;
             animation: textGlowMove 1.5s infinite alternate ease-in-out; 
@@ -686,10 +702,9 @@
             .hero-text-overlay p { font-size: 1rem; }
             .section-title { margin-top: 50px; margin-bottom: 30px; font-size: 26px; } 
             .how-it-works-title { margin-top: -80px; margin-bottom: 10px; }
-            .recycling-symbol { width: 150px; height: 150px; }
-            .splash-title { font-size: 35px; }
+            .splash-title { font-size: 45px; }
             .splash-tagline { font-size: 16px; }
-            .btn-splash { padding: 12px 30px; font-size: 18px; }
+            .btn-splash { padding: 15px 40px; font-size: 18px; }
             .green-container { width: 95%; margin: 80px auto; border-radius: 25px; }
             .services-box { flex-direction: column; padding: 40px 0; gap: 80px; }
             .service-col { padding: 0 20px; }
@@ -709,38 +724,42 @@
             .contact-item { justify-content: center; }
         }
 
-        /* Modal Styles */
+        /* --- Modal Styles (Updated with Glassmorphism) --- */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 100000; 
+            background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 100000; 
             justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;
         }
         .modal-overlay.active { display: flex; opacity: 1; }
         .modal-content {
-            background-color: #fff; padding: 40px; border-radius: 20px; width: 90%; max-width: 650px;
+            background-color: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 40px; border-radius: 20px; width: 90%; max-width: 650px;
             position: relative; transform: translateY(-20px); transition: transform 0.3s ease;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto;
         }
         .modal-overlay.active .modal-content { transform: translateY(0); }
         .modal-content::-webkit-scrollbar { width: 6px; }
         .modal-content::-webkit-scrollbar-thumb { background-color: var(--green-box); border-radius: 10px; }
-        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 28px; color: #999; cursor: pointer; transition: 0.3s; }
+        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 28px; color: #666; cursor: pointer; transition: 0.3s; }
         .close-modal:hover { color: var(--dark-green); }
         .modal-title { color: var(--text-dark); text-align: center; margin-bottom: 25px; font-size: 28px; font-weight: 700; }
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-row { display: flex; gap: 15px; }
         .form-row .form-group { flex: 1; }
-        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; color: var(--text-dark); }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; outline: none; transition: border-color 0.3s; font-family: 'Poppins', sans-serif; }
-        .form-group input:focus, .form-group textarea:focus { border-color: var(--dark-green); box-shadow: 0 0 5px rgba(103, 152, 54, 0.2); }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: var(--text-dark); }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px 15px; border: 1px solid rgba(255,255,255,0.6); background-color: rgba(255,255,255,0.7); border-radius: 10px; font-size: 14px; outline: none; transition: all 0.3s; font-family: 'Poppins', sans-serif; }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--dark-green); box-shadow: 0 0 8px rgba(103, 152, 54, 0.3); background-color: rgba(255,255,255,0.9); }
         .forgot-pass { display: block; text-align: right; font-size: 13px; color: var(--logo-blue); text-decoration: none; margin-bottom: 20px; margin-top: -5px; }
         .forgot-pass:hover { text-decoration: underline; }
         .btn-submit { width: 100%; margin-top: 15px; padding: 15px; font-size: 18px; }
 
         .selection-cards { display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; }
-        .card { border: 2px solid #ddd; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; width: 180px; }
-        .card:hover { border-color: var(--dark-green); background-color: #f0f7e6; }
-        .card.active { border-color: var(--dark-green); background-color: #e5ece2; box-shadow: 0 0 10px rgba(103,152,54,0.3); }
+        .card { border: 2px solid rgba(221,221,221,0.5); background-color: rgba(255,255,255,0.5); border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; width: 180px; backdrop-filter: blur(5px); }
+        .card:hover { border-color: var(--dark-green); background-color: rgba(240, 247, 230, 0.8); }
+        .card.active { border-color: var(--dark-green); background-color: rgba(229, 236, 226, 0.9); box-shadow: 0 0 15px rgba(103,152,54,0.2); }
         .card img { width: 150px; height: 150px; object-fit: contain; margin-bottom: 15px; }
         .card p { font-weight: 600; font-size: 16px; }
 
@@ -753,7 +772,7 @@
             margin-top: 15px; 
         }
         .material-card { 
-            border: 3px solid #e0e0e0; 
+            border: 3px solid rgba(224,224,224,0.6); 
             border-radius: 15px; 
             padding: 10px; 
             cursor: pointer; 
@@ -763,12 +782,12 @@
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            background-color: #f4f6f8; 
+            background-color: rgba(244, 246, 248, 0.6); 
             overflow: hidden;
         }
         .material-card:hover, .material-card.active { 
             border-color: #3b5f25; 
-            background-color: #e5ece2; 
+            background-color: rgba(229, 236, 226, 0.9); 
         }
         .material-card img { 
             width: 100%; 
@@ -776,9 +795,6 @@
             object-fit: contain; 
             transform: scale(1); 
             transition: 0.3s;
-        }
-        .material-card:hover img, .material-card.active img {
-            transform: scale(1); 
         }
         
         .material-cards .material-card:first-child img { 
@@ -797,10 +813,10 @@
         .reward-card { 
             position: relative; 
             width: 220px; 
-            border: 3px solid #e0e0e0; 
+            border: 3px solid rgba(224,224,224,0.6); 
             border-radius: 15px; 
             padding: 45px 15px 20px 15px; 
-            background-color: #f4f6f8; 
+            background-color: rgba(244, 246, 248, 0.6); 
             cursor: pointer; 
             transition: 0.3s; 
             display: flex; 
@@ -811,7 +827,7 @@
         
         .reward-card.active, .reward-card:hover { 
             border-color: #3b5f25; 
-            background-color: #e5ece2; 
+            background-color: rgba(229, 236, 226, 0.9); 
         }
         
         .reward-icon { 
@@ -854,26 +870,28 @@
 
         .slider-container { margin: 20px 0; text-align: center; }
         .slider-container input[type=range] { width: 100%; accent-color: var(--dark-green); cursor: pointer; }
-        .value-display { display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin: 20px 0 30px 0; padding: 15px 20px; background: #f9fdf5; border-radius: 10px; border: 1px solid #eee; }
+        .value-display { display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin: 20px 0 30px 0; padding: 15px 20px; background: rgba(249, 253, 245, 0.8); border-radius: 10px; border: 1px solid rgba(238,238,238,0.5); }
         .sub-heading { margin-bottom: 10px; font-size: 16px; color: var(--text-dark); font-weight: 600; }
 
-        .btn-social { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; border: 1px solid #ddd; }
-        .btn-google { background-color: #fff; color: #555; }
-        .btn-google:hover { background-color: #f9f9f9; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-social { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; border: 1px solid rgba(221,221,221,0.5); }
+        .btn-google { background-color: rgba(255,255,255,0.8); color: #333; }
+        .btn-google:hover { background-color: rgba(255,255,255,1); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .btn-google img { width: 24px; height: 24px; }
-        .btn-facebook { background-color: #1877f2; color: #fff; border: none; }
+        .btn-facebook { background-color: rgba(24, 119, 242, 0.9); color: #fff; border: none; }
         .btn-facebook:hover { background-color: #166fe5; }
         .btn-facebook img { width: 24px; height: 24px; }
-        .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #666; font-weight: 500; font-size: 14px; }
-        .divider::before, .divider::after { content: ""; flex: 1; border-bottom: 1px solid #ccc; }
+        .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #555; font-weight: 600; font-size: 14px; }
+        .divider::before, .divider::after { content: ""; flex: 1; border-bottom: 1px solid rgba(204,204,204,0.5); }
         .divider span { padding: 0 10px; }
     </style>
 </head>
 <body class="no-scroll">
 
+    <!-- شاشة البداية بتحديث صورة العالم كاملة الشاشة -->
     <div id="splash-screen" class="splash-screen">
+        <img src="world.jpeg" alt="World" class="splash-bg-image" id="splash-logo">
+        <div class="splash-overlay"></div>
         <div class="splash-content">
-            <img src="https://api.iconify.design/fa6-solid/recycle.svg?color=%23679836" class="recycling-symbol" id="splash-logo" alt="Recycling Sign">
             <h1 class="splash-title">RE Tadweer</h1>
             <p class="splash-tagline">Zerowaste</p>
             <button id="enter-btn" class="btn-splash">Change Starts Here</button>
@@ -908,7 +926,7 @@
         </div>
     </div>
 
-    <div class="custom-slider-wrapper">
+    <div class="custom-slider-wrapper reveal-on-scroll">
         <div class="slider-container" id="image-slider">
             <img src="Rectangle 80.png" alt="Recycling Event 1" class="slider-img">
             <img src="Rectangle 88.png" alt="Recycling Event 2" class="slider-img">
@@ -923,8 +941,7 @@
         </div>
     </div>
 
-    <!-- الإضافة الجديدة: السهم المتحرك والرسالة وجملة Click Here -->
-    <div class="scroll-down-wrapper">
+    <div class="scroll-down-wrapper reveal-on-scroll">
         <span class="click-here-text">Click Here</span>
         <div class="scroll-arrow-circle" id="arrow-reveal-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -937,9 +954,9 @@
         </div>
     </div>
 
-    <h2 class="section-title">Choose what you want to recycle</h2>
+    <h2 class="section-title reveal-on-scroll">Choose what you want to recycle</h2>
       
-    <div class="green-container services-box">
+    <div class="green-container services-box reveal-on-scroll">
         <div class="service-col">
             <div class="service-icon"><img src="Rectangle 24.png" alt="Paper"></div>
             <h3>Paper</h3>
@@ -960,13 +977,14 @@
         </div>
     </div>
 
-    <div class="earth-box"> <img src="Rectangle 9.png" alt="Earth Illustration">
+    <div class="earth-box reveal-on-scroll"> 
+        <img src="Rectangle 9.png" alt="Earth Illustration">
         <button class="btn-get-start" id="open-material-modal">Get Started</button>
     </div>
 
     <h2 class="section-title how-it-works-title">How It Works</h2>
 
-    <div class="green-container process-box">
+    <div class="green-container process-box reveal-on-scroll">
         <div class="dashed-line"></div>
         <div class="process-step">
             <img src="Ellipse 1.png" alt="Collect">
@@ -985,12 +1003,12 @@
         </div>
     </div>
 
-    <div class="reasons-title-container">
+    <div class="reasons-title-container reveal-on-scroll">
         <h2 class="section-title" style="margin: 0;">Why Recycling Matters</h2>
         <img src="https://api.iconify.design/fa6-solid/recycle.svg?color=%23679836" width="30" alt="Recycle Icon">
     </div>
 
-    <div class="green-container reasons-box">
+    <div class="green-container reasons-box reveal-on-scroll">
         <div class="reason-col">
             <div class="reason-title">
                 <img src="https://api.iconify.design/mdi/leaf-maple.svg?color=%23679836" alt="Leaf">
@@ -1014,7 +1032,7 @@
         </div>
     </div>
 
-    <footer>
+    <footer class="reveal-on-scroll">
         <div class="footer-content">
             <div class="footer-left">
                 <h3>RE-tadweer</h3>
@@ -1048,21 +1066,22 @@
     </footer>
 
     <div class="modal-overlay" id="contact-modal">
-        <div class="modal-content" style="background-color: #d8e5cd;"> <span class="close-modal" id="close-contact">&times;</span>
+        <div class="modal-content" style="background-color: rgba(216, 229, 205, 0.85);"> 
+            <span class="close-modal" id="close-contact">&times;</span>
             <h2 class="modal-title" style="text-align: left; color: #1a1a1a; margin-bottom: 30px;">Contact Us</h2>
             
             <form action="#">
                 <div class="form-group" style="text-align: left;">
                     <label>full name:</label>
-                    <input type="text" required style="background-color: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6);">
+                    <input type="text" required>
                 </div>
                 <div class="form-group" style="text-align: left;">
                     <label>Email:</label>
-                    <input type="email" required style="background-color: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6);">
+                    <input type="email" required>
                 </div>
                 <div class="form-group" style="text-align: left;">
                     <label>message:</label>
-                    <textarea required style="background-color: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6); resize: vertical; min-height: 120px;"></textarea>
+                    <textarea required style="resize: vertical; min-height: 120px;"></textarea>
                 </div>
                 
                 <button type="submit" class="btn-submit" style="background-color: #639845; color: white; border: none; border-radius: 10px; cursor: pointer; width: 40%; margin: 20px auto; display: block; font-weight: 600;">Send</button>
@@ -1091,11 +1110,11 @@
             <form action="#">
                 <div class="form-group" style="text-align: left;">
                     <label>Email or phone:</label>
-                    <input type="text" required style="background-color: #f9f9f9;">
+                    <input type="text" required>
                 </div>
                 <div class="form-group" style="text-align: left; margin-bottom: 5px;">
                     <label>Password:</label>
-                    <input type="password" required style="background-color: #f9f9f9;">
+                    <input type="password" required>
                 </div>
                 
                 <div style="text-align: left; margin-bottom: 25px;">
@@ -1138,7 +1157,7 @@
                 <div class="form-group"><label>Confirm Password :</label><input type="password" required></div>
                 <div class="form-group">
                     <label>Date of birth</label>
-                    <input type="date" required style="color: #666;">
+                    <input type="date" required style="color: #444;">
                 </div>
                 <div class="form-group"><label>Phone number:</label><input type="tel" required></div>
                 <div class="form-group"><label>Tel number:</label><input type="tel"></div>
@@ -1150,7 +1169,7 @@
     </div>
 
     <div class="modal-overlay" id="create-company-modal">
-        <div class="modal-content" style="max-width: 550px; background-color: #e5ece2;">
+        <div class="modal-content" style="max-width: 550px; background-color: rgba(229, 236, 226, 0.85);">
             <span class="close-modal" id="close-company">&times;</span>
             <h2 class="modal-title" style="font-size: 24px; color: #1a1a1a;">Create Company Account</h2>
             <form action="#">
@@ -1228,7 +1247,7 @@
             <p class="sub-heading">4. Upload Material Image</p>
             <div style="text-align: center; margin-bottom: 25px;">
                 <input type="file" id="material-image" accept="image/*" style="display: none;">
-                <label for="material-image" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 20px; border: 2px dashed var(--dark-green); border-radius: 10px; background-color: #f9fdf5; cursor: pointer; transition: 0.3s;" id="upload-label">
+                <label for="material-image" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 20px; border: 2px dashed var(--dark-green); border-radius: 10px; background-color: rgba(249, 253, 245, 0.7); cursor: pointer; transition: 0.3s;" id="upload-label">
                     <img src="https://api.iconify.design/mdi:camera-plus.svg?color=%23679836" alt="Camera" style="width: 32px; margin-bottom: 10px;">
                     <span style="font-size: 14px; font-weight: 600; color: var(--dark-green);">Take a Photo or Choose from Gallery</span>
                 </label>
@@ -1242,6 +1261,28 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // --- Intersection Observer for Scroll Reveal ---
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+
+
+            // --- Splash Screen Logic ---
             const splashScreen = document.getElementById('splash-screen');
             const enterBtn = document.getElementById('enter-btn');
             const splashLogo = document.getElementById('splash-logo');
@@ -1256,7 +1297,8 @@
             if(enterBtn) enterBtn.addEventListener('click', hideSplash);
             if(splashLogo) splashLogo.addEventListener('click', hideSplash);
 
-            // --- الإضافة الخاصة بالرسالة والسهم الجديد ---
+
+            // --- الرسالة والسهم الجديد ---
             const arrowBtn = document.getElementById('arrow-reveal-btn');
             const hiddenMsg = document.getElementById('hidden-message');
             
@@ -1266,6 +1308,8 @@
                 });
             }
 
+
+            // --- Modals Logic ---
             const loginModal = document.getElementById('login-modal');
             const accountTypeModal = document.getElementById('account-type-modal');
             const createProfileModal = document.getElementById('create-profile-modal');
@@ -1279,7 +1323,6 @@
             const openContactBtn = document.getElementById('open-contact');
             const nextToProfileBtn = document.getElementById('next-to-profile');
 
-            // وجعلنا الدالة Global عشان نقدر نستخدمها في الـ onclick من أي مكان
             window.closeAllModals = function() {
                 if(loginModal) loginModal.classList.remove('active');
                 if(accountTypeModal) accountTypeModal.classList.remove('active');
@@ -1410,13 +1453,13 @@
                             fileNameDisplay.style.display = "block";
                         }
                         if(uploadLabel) {
-                            uploadLabel.style.backgroundColor = "#e5ece2";
+                            uploadLabel.style.backgroundColor = "rgba(229, 236, 226, 0.8)";
                             uploadLabel.style.borderColor = "#416b22";
                         }
                     } else {
                         if(fileNameDisplay) fileNameDisplay.style.display = "none";
                         if(uploadLabel) {
-                            uploadLabel.style.backgroundColor = "#f9fdf5";
+                            uploadLabel.style.backgroundColor = "rgba(249, 253, 245, 0.7)";
                             uploadLabel.style.borderColor = "var(--dark-green)";
                         }
                     }

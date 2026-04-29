@@ -75,6 +75,85 @@
             }
         }
 
+        /* --- Scroll Down Arrow & Message Animations --- */
+        @keyframes bounceDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(12px); }
+        }
+
+        .scroll-down-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .click-here-text {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            animation: bounceDown 2s infinite ease-in-out; /* عشان تتحرك مع السهم */
+        }
+
+        .scroll-arrow-circle {
+            width: 55px;
+            height: 55px;
+            background-color: var(--dark-green);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            animation: bounceDown 2s infinite ease-in-out;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .scroll-arrow-circle:hover {
+            background-color: var(--circle-btn);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+
+        .scroll-arrow-circle svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .reveal-message {
+            margin-top: 15px;
+            padding: 0 20px;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            background-color: #f0f7e6;
+            color: var(--text-dark);
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 1.6;
+            width: 90%;
+            max-width: 700px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+
+        .reveal-message.show {
+            max-height: 150px;
+            opacity: 1;
+            padding: 20px;
+            border-color: var(--green-box);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -679,8 +758,8 @@
             padding: 10px; 
             cursor: pointer; 
             transition: 0.3s; 
-            width: 140px; /* العرض بتاع المربع */
-            height: 140px; /* الطول بتاع المربع */
+            width: 140px; 
+            height: 140px; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
@@ -702,18 +781,17 @@
             transform: scale(1); 
         }
         
-        /* --- كود منفصل للتحكم في حجم الصورة الأولى (Gemini) لوحدها --- */
         .material-cards .material-card:first-child img { 
-            transform: scale(2.2); /* الرقم ده هيكبر الصورة دي بالذات، جربي 2 أو 2.5 لحد ما تظبط */
+            transform: scale(2.2); 
         }
 
-        /* --- تصميم كروت المكافآت (Cash/Gift) المظبوط زي الصورة --- */
+        /* --- تصميم كروت المكافآت --- */
         .reward-cards { 
             display: flex; 
             gap: 30px; 
             justify-content: center; 
             margin-bottom: 30px; 
-            margin-top: 55px; /* مسافة من فوق عشان الأيقونة تطلع بره */
+            margin-top: 55px; 
         }
         
         .reward-card { 
@@ -721,7 +799,7 @@
             width: 220px; 
             border: 3px solid #e0e0e0; 
             border-radius: 15px; 
-            padding: 45px 15px 20px 15px; /* بادينج كبير من فوق */
+            padding: 45px 15px 20px 15px; 
             background-color: #f4f6f8; 
             cursor: pointer; 
             transition: 0.3s; 
@@ -844,6 +922,21 @@
             <span class="slider-dot" onclick="setSlide(1)"></span>
         </div>
     </div>
+
+    <!-- الإضافة الجديدة: السهم المتحرك والرسالة وجملة Click Here -->
+    <div class="scroll-down-wrapper">
+        <span class="click-here-text">Click Here</span>
+        <div class="scroll-arrow-circle" id="arrow-reveal-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <polyline points="19 12 12 19 5 12"></polyline>
+            </svg>
+        </div>
+        <div class="reveal-message" id="hidden-message">
+            Small acts today lead to a greener tomorrow. Secure your spot by registering through our "official Facebook or Instagram accounts."
+        </div>
+    </div>
+
     <h2 class="section-title">Choose what you want to recycle</h2>
       
     <div class="green-container services-box">
@@ -1162,6 +1255,16 @@
 
             if(enterBtn) enterBtn.addEventListener('click', hideSplash);
             if(splashLogo) splashLogo.addEventListener('click', hideSplash);
+
+            // --- الإضافة الخاصة بالرسالة والسهم الجديد ---
+            const arrowBtn = document.getElementById('arrow-reveal-btn');
+            const hiddenMsg = document.getElementById('hidden-message');
+            
+            if (arrowBtn && hiddenMsg) {
+                arrowBtn.addEventListener('click', () => {
+                    hiddenMsg.classList.toggle('show');
+                });
+            }
 
             const loginModal = document.getElementById('login-modal');
             const accountTypeModal = document.getElementById('account-type-modal');
